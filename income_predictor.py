@@ -25,9 +25,11 @@ data = data.dropna()  # Drop missing values
 
 # Encode categorical features
 categorical_columns = data.select_dtypes(include=['object']).columns
+encoders = {}  # Dictionary to store the encoders for each categorical column
 for col in categorical_columns:
     le = LabelEncoder()
     data[col] = le.fit_transform(data[col].astype(str))
+    encoders[col] = le  # Save the encoder for later use
 
 # Split data into features and target
 X = data.drop(columns=['income'])
@@ -46,7 +48,8 @@ st.write("Provide your details below:")
 user_data = {}
 for col in X.columns:
     if col in categorical_columns:
-        options = data[col].unique()
+        # Get the original categories from the encoder
+        options = encoders[col].classes_
         user_data[col] = st.selectbox(f"{col} (choose an option)", options)
     else:
         user_data[col] = st.number_input(f"{col} (enter a value)", min_value=float(data[col].min()), max_value=float(data[col].max()), step=1.0)
