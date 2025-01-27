@@ -11,7 +11,7 @@ st.write("This app predicts whether a person's income is greater than $50K based
 
 # Load the dataset
 st.header("Dataset and Preprocessing")
-file_path = 'C:\Users\Ajitesh Gajabary\adult.xlsx'  # Replace with your actual file path
+file_path = 'adult.xlsx'  # Replace with your actual file path
 try:
     data = pd.read_excel(file_path, header=1)
     st.write("Dataset loaded successfully!")
