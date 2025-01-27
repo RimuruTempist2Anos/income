@@ -54,8 +54,17 @@ for col in X.columns:
     else:
         user_data[col] = st.number_input(f"{col} (enter a value)", min_value=float(data[col].min()), max_value=float(data[col].max()), step=1.0)
 
-# Convert user input into a DataFrame
-user_input_df = pd.DataFrame([user_data])
+# Re-encode the user input before passing it to the model
+encoded_user_data = {}
+for col in user_data:
+    if col in categorical_columns:
+        # Encode the user input using the stored encoder
+        encoded_user_data[col] = encoders[col].transform([user_data[col]])[0]
+    else:
+        encoded_user_data[col] = user_data[col]
+
+# Convert the encoded user input into a DataFrame
+user_input_df = pd.DataFrame([encoded_user_data])
 
 # Show user input
 st.subheader("Your Input Data:")
